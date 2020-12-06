@@ -2,7 +2,7 @@
 #
 # Filename: test.py
 # Author: Jose R. Ortiz and ... (hopefully some students contribution)
-#
+# Student Contributor: Luis Fernando Javier Velazquez Sosa
 # Description:
 #       Script to test the MySQL support library for the DFS project.
 #

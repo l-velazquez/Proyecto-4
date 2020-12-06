@@ -2,7 +2,7 @@
 #
 # Filename: Packet.py
 # Author: Jose R. Ortiz and ... (hopefully some students contribution)
-#
+# Student Contributor: Luis Fernando Javier Velazquez Sosa
 # Description:
 # 	Packet creation support library for the DFS project. Database info for
 #

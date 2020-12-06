@@ -2,7 +2,7 @@
 #
 # Filename: mds_db.py
 # Author: Jose R. Ortiz and ... (hopefully some students contribution)
-#
+# Student Contributor: Luis Fernando Javier Velazquez Sosa
 # Description:
 # 	Copy client for the DFS
 #
