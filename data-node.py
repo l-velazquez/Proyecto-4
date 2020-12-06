@@ -16,7 +16,7 @@ import uuid
 import os.path
 
 def usage():
-	print """Usage: python %s <server> <port> <data path> <metadata port,default=8000>""" % sys.argv[0] 
+	print ("""Usage: python %s <server> <port> <data path> <metadata port,default=8000>""" % sys.argv[0] )
 	sys.exit(0)
 
 
@@ -38,10 +38,10 @@ def register(meta_ip, meta_port, data_ip, data_port):
 			response = sock.recv(1024)
 
 			if response == "DUP":
-				print "Duplicate Registration"
+				print ("Duplicate Registration")
 
 		 	if response == "NAK":
-				print "Registratation ERROR"
+				print ("Registratation ERROR")
 
 	finally:
 		sock.close()
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 			META_PORT = int(sys.argv[4])
 
 		if not os.path.isdir(DATA_PATH):
-			print "Error: Data path %s is not a directory." % DATA_PATH
+			print ("Error: Data path %s is not a directory." % DATA_PATH)
 			usage()
 	except:
 		usage()

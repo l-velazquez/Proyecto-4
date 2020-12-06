@@ -81,7 +81,7 @@ if __name__ == "__main__":
 		to_path = sys.argv[2]
 
 		if os.path.isdir(to_path):
-			print "Error: path %s is a directory.  Please name the file." % to_path
+			print ("Error: path %s is a directory.  Please name the file." % to_path)
 			usage()
 
 		copyFromDFS((ip, port), from_path, to_path)
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 		from_path = sys.argv[1]
 
 		if os.path.isdir(from_path):
-			print "Error: path %s is a directory.  Please name the file." % from_path
+			print ("Error: path %s is a directory.  Please name the file." % from_path)
 			usage()
 
 		copyToDFS((ip, port), to_path, from_path)

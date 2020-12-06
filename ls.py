@@ -14,7 +14,7 @@ import socket
 from Packet import *
 
 def usage():
-	print """Usage: python %s <server>:<port, default=8000>""" % sys.argv[0] 
+	print ("""Usage: python %s <server>:<port, default=8000>""" % sys.argv[0])
 	sys.exit(0)
 
 def client(ip, port):

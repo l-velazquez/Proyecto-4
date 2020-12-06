@@ -15,17 +15,17 @@ from mds_db import *
 db = mds_db("dfs.db") 
 
 # Connect to the database
-print "Connecting to database" 
+print ("Connecting to database" )
 db.Connect() 
 
 # Testing how to add a new node to the metadata server.
 # Note that I used a node name, the address and the port.
 # Address and port are necessary for connection.
 
-print "Choteando one of the steps of the assignment :) ..."
-print "Files in the database"
+print ("Choteando one of the steps of the assignment :) ...")
+print ("Files in the database")
 for file, size in db.GetFiles():
-	print file, size
-print
+	print (file, size)
+print()
 
 db.Close() 
