@@ -1,8 +1,8 @@
 ###############################################################################
 #
-# Filename: mds_db.py
-# Author: Jose R. Ortiz and ... (hopefully some students contribution)
-# Student Contributor: Luis Fernando Javier Velázquez Sosa
+# Filename: ls.py
+# Author: Jose R. Ortiz and Luis Fernando Javier Velázquez Sosa
+#
 # Description:
 # 	List client for the DFS
 #
@@ -10,7 +10,7 @@
 
 
 import socket
-
+import sys
 from Packet import *
 
 def usage():
@@ -20,6 +20,20 @@ def usage():
 def client(ip, port):
 
 	# Contacts the metadata server and ask for list of files.
+	sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	sock.connect((ip,port))
+
+	package = Packet()
+	package.BuildListPacket()
+	sock.sendall(package.getEncodedPacket())
+
+	receive = sock.recv(1024)
+
+	package.DecodePacket(receive)
+	file_arr = package.getFileArray()
+
+	for i in file_arr:
+		print (i[0],i[1],"bytes")
 
 if __name__ == "__main__":
 

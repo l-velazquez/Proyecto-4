@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# Filename: mds_db.py
+# Filename: copy.py
 # Author: Jose R. Ortiz and ... (hopefully some students contribution)
 # Student Contributor: Luis Fernando Javier Velazquez Sosa
 # Description:
@@ -25,16 +25,22 @@ def copyToDFS(address, fname, path):
 	"""
 
 	# Create a connection to the data server
-
+	sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	sock.connect(address)
 	# Fill code
 
 	# Read file
-
+	fd = open(path, "rb")#rb es read bytes
+	fileData = fd.read()
+	fd.close()
 	# Fill code
 
 	# Create a Put packet with the fname and the length of the data,
-	# and sends it to the metadata server 
-
+	# and sends it to the metadata server
+	fileSize = len(fileData) #to know the length of the data
+	pack = Packet()
+	pack.BuildPutPacket(fname,fileSize)
+	sock.sendall(pack.getEncodedPacket())
 	# Fill code
 
 	# If no error or file exists
