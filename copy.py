@@ -63,9 +63,32 @@ def copyToDFS(address, fname, path):
 		#aqui hago un for que va de 0 hasta fileSize y incrementa la cantidad de blockSize
 		for i in range(0,fileSize,blockSize):
 			if (i/blockSize)+1 == dataNodeSize:
+				#aqui busca y le da append al data despues de donde esta el valor de i
 				blocks.append(fileData[i:])
+				#y rompe el loop para seguir al lo proximó
+				break
+			else:
+				#empieza desde indice i y acaba en el indice i+blockSize
+				blocks.append(fileData[i:i+blockSize])
 
 	# Send the blocks to the data servers
+	for i in dataNode:
+		#create a connection
+		dataNodeSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		dataNodeSocket.connect((i[0],i[1]))
+		pack.BuildPutPacket(fname,fileSize)
+		dataNodeSocket.sendall(pack.getEncodedPacket())
+		received = dataNodeSocket.recv(1024)
+		dataBlock = blocks.pop(0)
+
+		if received == "OK":
+			dataSize = len(dataBlock)
+			dataNodeSocket.sendall(str(dataSize))
+			received = dataNodeSocket.recv(1024)
+
+			while len(dataSize) > 0:
+
+
 
 	# Fill code	
 
