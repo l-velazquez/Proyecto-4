@@ -44,8 +44,27 @@ def copyToDFS(address, fname, path):
 	# Fill code
 
 	# If no error or file exists
+	received = sock.recv(1024)
+	sock.close()
+
+	if received == "DUP":
+		print("This is a Duplicated File")
+		return
 	# Get the list of data nodes.
+	else:
+		pack.DecodePacket(received)
+		dataNode = pack.getDataNodes()
+
 	# Divide the file in blocks
+		blocks = []
+		dataNodeSize = len(dataNode)
+		blockSize = int(fileSize/dataNodeSize)
+
+		#aqui hago un for que va de 0 hasta fileSize y incrementa la cantidad de blockSize
+		for i in range(0,fileSize,blockSize):
+			if (i/blockSize)+1 == dataNodeSize:
+				blocks.append(fileData[i:])
+
 	# Send the blocks to the data servers
 
 	# Fill code	
