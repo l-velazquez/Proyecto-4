@@ -81,7 +81,9 @@ class MetadataTCPHandler(SocketServer.BaseRequestHandler):
 
 		# Fill code to get file name and blocks from
 		# packet
-	
+		fileName = p.getFileName()
+		blocks = p.getDataBlocks()
+		db.AddBlockToInode(fileName,blocks)
 		# Fill code to add blocks to file inode
 
 		
@@ -96,7 +98,7 @@ class MetadataTCPHandler(SocketServer.BaseRequestHandler):
 
 		# Receive a msg from the list, data-node, or copy clients
 		msg = self.request.recv(1024)
-		print msg, type(msg)
+		print (msg, type(msg))
 		
 		# Decode the packet received
 		p.DecodePacket(msg)
@@ -112,34 +114,33 @@ class MetadataTCPHandler(SocketServer.BaseRequestHandler):
 
 		elif cmd == "list":
 			# Client asking for a list of files
-			# Fill code
+			self.handle_reg(db)
 		
 		elif cmd == "put":
 			# Client asking for servers to put data
-			# Fill code
+			self.handle_reg(db, p)
 		
 		elif cmd == "get":
 			# Client asking for servers to get data
-			# Fill code
+			self.handle_reg(db,p)
 
 		elif cmd == "dblks":
 			# Client sending data blocks for file
-			 # Fill code
-
+			 self.handle_reg(db,p)
 
 		db.Close()
 
 if __name__ == "__main__":
-    HOST, PORT = "", 8000
+	HOST, PORT = "", 8000
 
-    if len(sys.argv) > 1:
-    	try:
-    		PORT = int(sys.argv[1])
-    	except:
-    		usage()
+	if len(sys.argv) > 1:
+		try:
+			PORT = int(sys.argv[1])
+		except:
+			usage()
 
-    server = SocketServer.TCPServer((HOST, PORT), MetadataTCPHandler)
+	server = SocketServer.TCPServer((HOST, PORT), MetadataTCPHandler)
 
-    # Activate the server; this will keep running until you
+	# Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
-    server.serve_forever()
+	server.serve_forever()
