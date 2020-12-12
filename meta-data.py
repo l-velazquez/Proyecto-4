@@ -26,7 +26,7 @@ class MetadataTCPHandler(SocketServer.BaseRequestHandler):
 			NAK if problem, DUP if the IP and port already registered
 		"""
 		try:
-			if # Fill condition:
+			if db.AddDataNode(p.getAddr(),p.getPort()) != 0:# Fill condition:
 				self.request.sendall("ACK") 
 			else:
 				self.request.sendall("DUP")
@@ -36,7 +36,11 @@ class MetadataTCPHandler(SocketServer.BaseRequestHandler):
 	def handle_list(self, db):
 		"""Get the file list from the database and send list to client"""
 		try:
-			# Fill code here
+			dbfiles = db.GetFiles()
+			packet = Packet()
+			packet.BuildListResponse(dbfiles)
+			self.request.sendall(packet.getEncodedPacket())
+
 		except:
 			self.request.sendall("NAK")	
 
@@ -45,11 +49,13 @@ class MetadataTCPHandler(SocketServer.BaseRequestHandler):
 		   the file.
 		"""
 	       
-		# Fill code 
-	
+		# Fill code
+		fileInfo = p.getFileInfo()
+
 		if db.InsertFile(info[0], info[1]):
-			# Fill code
-			
+			dataNodes = db.GetDataNodes()
+			p.BuildPutResponse(dataNodes)
+			self.request.sendall(p.getEncodedPacket())
 		else:
 			self.request.sendall("DUP")
 	
@@ -60,10 +66,12 @@ class MetadataTCPHandler(SocketServer.BaseRequestHandler):
 
 		# Fill code to get the file name from packet and then 
 		# get the fsize and array of metadata server
+		fileName = p.getFileName()
+		fileSize,MetadataList = db.GetFileInode(fileName)
 
-		if fsize:
+		if fileSize:
 			# Fill code
-
+			p.BuildGetResponse(MetadataList,fileSize)
 			self.request.sendall(p.getEncodedPacket())
 		else:
 			self.request.sendall("NFOUND")

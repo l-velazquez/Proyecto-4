@@ -53,11 +53,11 @@ def copyToDFS(address, fname, path):
 	# Get the list of data nodes.
 	else:
 		pack.DecodePacket(received)
-		dataNode = pack.getDataNodes()
+		dataNodes = pack.getDataNodes()
 
 	# Divide the file in blocks
 		blocks = []
-		dataNodeSize = len(dataNode)
+		dataNodeSize = len(dataNodes)
 		blockSize = int(fileSize/dataNodeSize)
 
 		#aqui hago un for que va de 0 hasta fileSize y incrementa la cantidad de blockSize
@@ -72,7 +72,7 @@ def copyToDFS(address, fname, path):
 				blocks.append(fileData[i:i+blockSize])
 
 	# Send the blocks to the data servers
-	for i in dataNode:
+	for i in dataNodes:
 		#create a connection
 		dataNodeSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		dataNodeSocket.connect((i[0],i[1]))
@@ -83,17 +83,25 @@ def copyToDFS(address, fname, path):
 
 		if received == "OK":
 			dataSize = len(dataBlock)
-			dataNodeSocket.sendall(str(dataSize))
+			dataNodeSocket.send(str(dataSize))
 			received = dataNodeSocket.recv(1024)
+			while (dataBlock):
+				dataNodeSocket.sendall(dataBlock[0:1024])
+				dataBlock = dataBlock[1024:]
+				
+			dataNodeSocket.sendall("OK")
+			received = dataNodeSocket.recv(1024)
+			i.append(received)
+		dataNodeSocket.close()
 
-			while len(dataSize) > 0:
-
-
-
-	# Fill code	
+	# Fill code
 
 	# Notify the metadata server where the blocks are saved.
-
+	sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	sock.connect(address)
+	pack.BuildDataBlockPacket(fname,dataNodes)
+	sock.sendall(pack.getEncodedPacket())
+	sock.close
 	# Fill code
 	
 def copyFromDFS(address, fname, path):
@@ -101,17 +109,40 @@ def copyFromDFS(address, fname, path):
 	    the file fname.  Get the data blocks from the data nodes.
 	    Saves the data in path.
 	"""
-
-   	# Contact the metadata server to ask for information of fname
-
+	# Contact the metadata server to ask for information of fname
+	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	sock.connect(address)
+	packet = Packet()
+	packet.BuildGetPacket(fname)
+	sock.sendall(packet.getEncodedPacket())
 	# Fill code
 
 	# If there is no error response Retreive the data blocks
-
+	recieved = sock.recv(1024)
+	packet.DecodePacket(recieved)
+	dataNodeList = packet.getDataNodes()
 	# Fill code
 
-    	# Save the file
-	
+    # Save the file
+	file = open(path,'wb')#write byte
+	for dataNode in dataNodeList:
+		dataNodeSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		dataNodeSocket.connect((dataNode[0],dataNode[1]))
+		packet.BuildDataBlockPacket((dataNode[2]))
+		dataNodeSocket.sendall(packet.getEncodedPacket())
+		dataNodeSize = int(dataNodeSocket.recv(1024))
+		dataNodeSocket.sendall("OK")
+
+		data = 0
+		information = b""
+		while data > dataNodeSize:
+			recieved = dataNodeSocket.recv(1024)
+			information = information + recieved
+			data+=1024
+			dataNodeSocket.sendall("OK")
+		file.write(information)
+		dataNodeSocket.close()
+	file.close()
 	# Fill code
 
 if __name__ == "__main__":
