@@ -83,7 +83,7 @@ class mds_db:
 		except:
 			return 0
 	
- 	def GetFileInfo(self, fname):
+	def GetFileInfo(self, fname):
 		"""Given a filename, if the file is stored in DFS
      		   return its filename id and fsize.  Internal use only.
 		   Does not have to be accessed from the metadata server.

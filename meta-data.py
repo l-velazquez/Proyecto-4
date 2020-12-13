@@ -12,14 +12,14 @@
 from mds_db import *
 from Packet import *
 import sys
-import SocketServer
+import socketserver# changed to python 3.8 module
 
 def usage():
 	print ("""Usage: python %s <port, default=8000>""" % sys.argv[0] )
 	sys.exit(0)
 
 
-class MetadataTCPHandler(SocketServer.BaseRequestHandler):
+class MetadataTCPHandler(socketserver.BaseRequestHandler):
 
 	def handle_reg(self, db, p):
 		"""Register a new client to the DFS  ACK if successfully REGISTERED
@@ -52,7 +52,7 @@ class MetadataTCPHandler(SocketServer.BaseRequestHandler):
 		# Fill code
 		fileInfo = p.getFileInfo()
 
-		if db.InsertFile(info[0], info[1]):
+		if db.InsertFile(fileInfo[0], fileInfo[1]):
 			dataNodes = db.GetDataNodes()
 			p.BuildPutResponse(dataNodes)
 			self.request.sendall(p.getEncodedPacket())
@@ -139,7 +139,7 @@ if __name__ == "__main__":
 		except:
 			usage()
 
-	server = SocketServer.TCPServer((HOST, PORT), MetadataTCPHandler)
+	server = socketserver.TCPServer((HOST, PORT), MetadataTCPHandler)
 
 	# Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
