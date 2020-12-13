@@ -1,8 +1,7 @@
 ###############################################################################
 #
 # Filename: data-node.py
-# Author: Jose R. Ortiz and ... (hopefully some students contribution)
-# Student Contributor: Luis Fernando Javier Velazquez Sosa
+# Author: Jose R. Ortiz and Luis Fernando Javier Velazquez Sosa
 # Description:
 # 	data node server for the DFS
 #
@@ -11,7 +10,7 @@ from Packet import *
 
 import sys
 import socket
-import SocketServer
+import socketserver
 import uuid
 import os.path
 
@@ -26,7 +25,8 @@ def register(meta_ip, meta_port, data_ip, data_port):
 	"""
 
 	# Establish connection
-	
+	sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	sock.connect((meta_ip,meta_port))
 	# Fill code	
 
 	try:
@@ -47,7 +47,7 @@ def register(meta_ip, meta_port, data_ip, data_port):
 		sock.close()
 	
 
-class DataNodeTCPHandler(SocketServer.BaseRequestHandler):
+class DataNodeTCPHandler(socketserver.BaseRequestHandler):
 
 	def handle_put(self, p):
 
@@ -64,10 +64,23 @@ class DataNodeTCPHandler(SocketServer.BaseRequestHandler):
 		blockid = str(uuid.uuid1())
 
 
-		# Open the file for the new data block.  
+		# Open the file for the new data block.
+		file = open(DATA_PATH + blockid,'w')
 		# Receive the data block.
-		# Send the block id back
+		dataBlock = int(self.request.recv(1024))
+		self.request.send("OK")
+		information = 0
 
+		while len(information)< dataBlock:
+			received = self.request.recv(1024)
+			information+=received
+			self.request.send("OK")
+
+		file.write(information)
+		received = self.request.recv(1024)
+		# Send the block id back
+		self.request.sendall(blockid)
+		self.request.close()
 		# Fill code
 
 	def handle_get(self, p):
@@ -77,13 +90,20 @@ class DataNodeTCPHandler(SocketServer.BaseRequestHandler):
 
 
 		# Read the file with the block id data
+		file = open(DATA_PATH+blockid,'rb')
+		data = file.read(1024)
 		# Send it back to the copy client.
-		
+		while (data):
+			self.request.send(data)
+			data = file.read(1024) # incase it hasn't sent all the information
+			received = self.request.recv(1024)
+		file.close()
+		self.request.close()
 		# Fill code
 
 	def handle(self):
 		msg = self.request.recv(1024)
-		print msg, type(msg)
+		print (msg, type(msg))
 
 		p = Packet()
 		p.DecodePacket(msg)
@@ -107,7 +127,7 @@ if __name__ == "__main__":
 		PORT = int(sys.argv[2])
 		DATA_PATH = sys.argv[3]
 
-		if len(sys.argv > 4):
+		if len(sys.argv) > 4:
 			META_PORT = int(sys.argv[4])
 
 		if not os.path.isdir(DATA_PATH):
@@ -118,8 +138,7 @@ if __name__ == "__main__":
 
 
 	register("localhost", META_PORT, HOST, PORT)
-	server = SocketServer.TCPServer((HOST, PORT), DataNodeTCPHandler)
-
-    # Activate the server; this will keep running until you
+	server = socketserver.TCPServer((HOST, PORT), DataNodeTCPHandler)
+	# Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
  	server.serve_forever()

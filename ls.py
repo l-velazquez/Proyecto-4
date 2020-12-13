@@ -43,12 +43,12 @@ if __name__ == "__main__":
 	ip = None
 	port = None 
 	server = sys.argv[1].split(":")
-	if len(server == 1):
+	if len(server) == 1:
 		ip = server[0]
 		port = 8000
-	elif len(server == 2):
+	elif len(server) == 2:
 		ip = server[0]
-		port = int server[1]
+		port = int(server[1])
 
 	if not ip:
 		usage()

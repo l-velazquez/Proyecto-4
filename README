@@ -10,8 +10,14 @@ CCOM 4017: Operating Systems
     These programs are to learn how to implement the main components of a file system by using the distributed file
     system (DFS). This program will use the programming language Python.
 
+    Metadata server: will funcion as an inodes repository
+    Data server: will be the disk space for file data blocks
+    list client: list the files avaliable in the DSF
+    copy client: will copy files from and to the DSF
 
 
     Resources used:
     What is python slicing?
-https://www.educative.io/edpresso/what-is-slicing-in-python?aid=5082902844932096&utm_source=google&utm_medium=cpc&utm_campaign=edpresso-dynamic&gclid=CjwKCAiAq8f-BRBtEiwAGr3DgWlxfOpiPTonQ_mAW8bQMGH8px8azCHMeUNoptWOEeCzuYpJRanvVxoC1msQAvD_BwE
+    https://rb.gy/egikb6
+        This reference was used to e able to see the use of slicing and it being used to be able to send multiple
+        elements of the array instead of doing a for loop going through each element.

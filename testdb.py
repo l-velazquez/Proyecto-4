@@ -1,8 +1,7 @@
 ###############################################################################
 #
 # Filename: test.py
-# Author: Jose R. Ortiz and ... (hopefully some students contribution)
-# Student contributor: Luis Fernando Javier Velázquez Sosa
+# Author: Jose R. Ortiz and Luis Fernando Javier Velázquez Sosa
 # Description:
 #       Script to test the MySQL support library for the DFS project.
 #
@@ -22,7 +21,7 @@ db.Connect()
 # Note that I used a node name, the address and the port.
 # Address and port are necessary for connection.
 
-print "Testing node addition"
+print ("Testing node addition")
 id1 = db.AddDataNode("136.145.54.10", 80) 
 id2 = db.AddDataNode("136.145.54.11", 80) 
 print ()
@@ -32,7 +31,7 @@ print (db.CheckNode(id1))
 print()
 
 print ("Testing all Available data nodes")
-for address, port in  db.GetDataNodes():
+for address, port in db.GetDataNodes():
 	print(address, port)
 
 print()
@@ -54,7 +53,7 @@ try:
 	db.AddBlockToInode("/hola/cheo.txt", [(id1, "1"), (id2, "1")])
 except:
 	print ("Won't duplicate")
-print
+print()
 
 print ("Testing retreiving Inode info")
 fsize, chunks_info = db.GetFileInode("/hola/cheo.txt")
