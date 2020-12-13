@@ -4,6 +4,7 @@ Programmer: Luis Fernando Javier Velázquez Sosa
 University of Puerto Rico at Rio Piedras
 Department of Computer Science
 CCOM 4017: Operating Systems
+Profesor: Jose R. Ortix Ubarri
 
 
     Discription:
@@ -15,7 +16,7 @@ CCOM 4017: Operating Systems
     list client: list the files available in the DSF
     copy client: will copy files from and to the DSF
 
-    How to run a Funcional Distributed file system:
+    How to run a functional Distributed File System:
 
     I. Create the Data Base for the data of the DFS
         1. In the terminal* go to were all the DFS files are
