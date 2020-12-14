@@ -40,7 +40,7 @@ def copyToDFS(address, fname, path):
 	fileSize = len(fileData) #to know the length of the data
 	pack = Packet()
 	pack.BuildPutPacket(fname,fileSize)
-	sock.sendall(pack.getEncodedPacket())
+	sock.sendall(bytes(pack.getEncodedPacket(),"utf-8"))
 	# Fill code
 
 	# If no error or file exists
@@ -77,19 +77,19 @@ def copyToDFS(address, fname, path):
 		dataNodeSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		dataNodeSocket.connect((i[0],i[1]))
 		pack.BuildPutPacket(fname,fileSize)
-		dataNodeSocket.sendall(pack.getEncodedPacket())
+		dataNodeSocket.sendall(bytes(pack.getEncodedPacket(),"utf-8"))
 		received = dataNodeSocket.recv(1024)
 		dataBlock = blocks.pop(0)
 
 		if received == "OK":
 			dataSize = len(dataBlock)
-			dataNodeSocket.send(str(dataSize))
+			dataNodeSocket.send(bytes(dataSize))
 			received = dataNodeSocket.recv(1024)
 			while (dataBlock):
 				dataNodeSocket.sendall(dataBlock[0:1024])
 				dataBlock = dataBlock[1024:]
 				
-			dataNodeSocket.sendall("OK")
+			dataNodeSocket.sendall(bytes("OK"))
 			received = dataNodeSocket.recv(1024)
 			i.append(received)
 		dataNodeSocket.close()
@@ -100,8 +100,8 @@ def copyToDFS(address, fname, path):
 	sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	sock.connect(address)
 	pack.BuildDataBlockPacket(fname,dataNodes)
-	sock.sendall(pack.getEncodedPacket())
-	sock.close
+	sock.sendall(bytes(pack.getEncodedPacket(),"utf-8"))
+	sock.close()
 	# Fill code
 	
 def copyFromDFS(address, fname, path):
@@ -114,7 +114,7 @@ def copyFromDFS(address, fname, path):
 	sock.connect(address)
 	packet = Packet()
 	packet.BuildGetPacket(fname)
-	sock.sendall(packet.getEncodedPacket())
+	sock.sendall(bytes(packet.getEncodedPacket(),"utf-8"))
 	# Fill code
 
 	# If there is no error response Retreive the data blocks
@@ -129,9 +129,9 @@ def copyFromDFS(address, fname, path):
 		dataNodeSocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		dataNodeSocket.connect((dataNode[0],dataNode[1]))
 		packet.BuildDataBlockPacket((dataNode[2]))
-		dataNodeSocket.sendall(packet.getEncodedPacket())
+		dataNodeSocket.sendall(bytes(packet.getEncodedPacket(),"utf-8"))
 		dataNodeSize = int(dataNodeSocket.recv(1024))
-		dataNodeSocket.sendall("OK")
+		dataNodeSocket.sendall(bytes("OK"))
 
 		data = 0
 		information = b""
@@ -139,7 +139,7 @@ def copyFromDFS(address, fname, path):
 			recieved = dataNodeSocket.recv(1024)
 			information = information + recieved
 			data+=1024
-			dataNodeSocket.sendall("OK")
+			dataNodeSocket.sendall(bytes("OK"))
 		file.write(information)
 		dataNodeSocket.close()
 	file.close()

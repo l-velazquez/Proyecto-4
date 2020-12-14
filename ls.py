@@ -25,11 +25,11 @@ def client(ip, port):
 
 	package = Packet()
 	package.BuildListPacket()
-	sock.sendall(package.getEncodedPacket())
+	sock.sendall(bytes(package.getEncodedPacket(),"utf-8"))
 
 	receive = sock.recv(1024)
-
-	package.DecodePacket(receive)
+	print(receive)
+	package.DecodePacket(receive.decode("utf-8"))
 	file_arr = package.getFileArray()
 
 	for i in file_arr:

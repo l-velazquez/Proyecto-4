@@ -34,13 +34,13 @@ def register(meta_ip, meta_port, data_ip, data_port):
 		sp = Packet()
 		while response == "NAK":
 			sp.BuildRegPacket(data_ip, data_port)
-			sock.sendall(sp.getEncodedPacket())
+			sock.sendall(bytes(sp.getEncodedPacket(),"utf-8"))#changed it because it was returning a str no a byte
 			response = sock.recv(1024)
 
 			if response == "DUP":
 				print ("Duplicate Registration")
 
-		 	if response == "NAK":
+			if response == "NAK":
 				print ("Registratation ERROR")
 
 	finally:
@@ -77,9 +77,9 @@ class DataNodeTCPHandler(socketserver.BaseRequestHandler):
 			self.request.send("OK")
 
 		file.write(information)
-		received = self.request.recv(1024)
+		self.request.recv(1024)
 		# Send the block id back
-		self.request.sendall(blockid)
+		self.request.sendall(bytes(blockid,"utf-8"))
 		self.request.close()
 		# Fill code
 
@@ -95,7 +95,7 @@ class DataNodeTCPHandler(socketserver.BaseRequestHandler):
 		# Send it back to the copy client.
 		while (data):
 			self.request.send(data)
-			data = file.read(1024) # incase it hasn't sent all the information
+			data = file.read(1024)# incase it hasn't sent all the information
 			received = self.request.recv(1024)
 		file.close()
 		self.request.close()
@@ -141,4 +141,4 @@ if __name__ == "__main__":
 	server = socketserver.TCPServer((HOST, PORT), DataNodeTCPHandler)
 	# Activate the server; this will keep running until you
     # interrupt the program with Ctrl-C
- 	server.serve_forever()
+	server.serve_forever()

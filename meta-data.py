@@ -39,7 +39,7 @@ class MetadataTCPHandler(socketserver.BaseRequestHandler):
 			dbfiles = db.GetFiles()
 			packet = Packet()
 			packet.BuildListResponse(dbfiles)
-			self.request.sendall(packet.getEncodedPacket())
+			self.request.sendall(packet.getEncodedPacket)
 
 		except:
 			self.request.sendall("NAK")	
@@ -55,7 +55,7 @@ class MetadataTCPHandler(socketserver.BaseRequestHandler):
 		if db.InsertFile(fileInfo[0], fileInfo[1]):
 			dataNodes = db.GetDataNodes()
 			p.BuildPutResponse(dataNodes)
-			self.request.sendall(p.getEncodedPacket())
+			self.request.sendall(p.getEncodedPacket)
 		else:
 			self.request.sendall("DUP")
 	
@@ -72,7 +72,7 @@ class MetadataTCPHandler(socketserver.BaseRequestHandler):
 		if fileSize:
 			# Fill code
 			p.BuildGetResponse(MetadataList,fileSize)
-			self.request.sendall(p.getEncodedPacket())
+			self.request.sendall(p.getEncodedPacket)
 		else:
 			self.request.sendall("NFOUND")
 

@@ -17,11 +17,12 @@ class Packet:
 		self.commands = ["reg", "list", "put", "get", "dblks"]
 		self.packet = {}
 		
+
+
 	def getEncodedPacket(self):
 		"""returns a seriliazed packet ready to send through the network.  
 		First you need to build the packets.  See BuildXPacket functions."""
-
-		return json.dumps(self.packet) 
+		return json.dumps(self.packet)
 
 	def getCommand(self):
 		"""Returns the command type of a packet"""

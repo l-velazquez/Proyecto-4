@@ -82,3 +82,21 @@ Profesor: Jose R. Ortix Ubarri
     https://rb.gy/egikb6
         This reference was used to e able to see the use of slicing and it being used to be able to send multiple
         elements of the array instead of doing a for loop going through each element.
+
+    Byte Like objects
+    https://docs.python.org/3.8/library/stdtypes.html#bytes
+    Having troble with the encoding not sending byte like objects and sending instead a string,
+    * tried to solve the problem but I took so much time trying to figure it out that honestly didnt know how
+
+    Update: I did some changes and used some of the information in
+    this website https://stackoverflow.com/questions/33003498/typeerror-a-bytes-like-object-is-required-not-str
+    to solve the problem
+
+    Socket Tutorial
+    https://youtu.be/Lbfe3-v7yE0
+    This was to help me visualize and understand it better to know what was going on, it
+    was more like a review.
+
+    Socket Server
+    https://docs.python.org/3.8/library/socketserver.html?highlight=socketserver#module-socketserver
+    To understand the way it functions I read parts of the documentations.
